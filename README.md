@@ -12,8 +12,11 @@ You enter a one-sentence claim (e.g. *“This supplement improves memory in olde
 |--------|------|
 | Planner | Breaks the claim into search queries |
 | Trial scout | ClinicalTrials.gov |
-| Science scout | OpenAlex + Europe PMC |
-| Regulatory scout | openFDA (recalls, labels, events where relevant) |
+| OpenAlex scout | OpenAlex |
+| Europe PMC scout | Europe PMC |
+| Crossref scout | Crossref (DOI metadata) |
+| PubMed scout | PubMed (NCBI E-utilities) |
+| Regulatory scout | openFDA (labels / events) |
 | Advocate | Best supported reading of the evidence |
 | Critic | Overreach, weak studies, missing proof |
 | Writer | **Say** / **Don’t say** / **Need more proof** |

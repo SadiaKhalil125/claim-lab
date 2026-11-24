@@ -247,6 +247,8 @@ Free APIs (no paid keys required for core demo):
 - ClinicalTrials.gov — https://clinicaltrials.gov/data-api/api  
 - OpenAlex — https://api.openalex.org/  
 - Europe PMC — https://europepmc.org/RestfulWebService  
+- Crossref — https://www.crossref.org/documentation/retrieve-metadata/rest-api/  
+- PubMed — https://www.ncbi.nlm.nih.gov/home/develop/api/ (`NCBI_CONTACT_EMAIL` in `.env.example`)  
 - openFDA — https://open.fda.gov/apis/  
 
 **Agent flow (v1):**
