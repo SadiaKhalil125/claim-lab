@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claim Lab
 
-## Getting Started
+**AGENT-A-THON** — multi-agent fact-check desk for bold public claims (marketing, pitch decks, articles).
 
-First, run the development server:
+You enter a one-sentence claim (e.g. *“This supplement improves memory in older adults”*). Specialist agents pull evidence from **free public APIs**, then an **advocate** and **critic** debate what the claim can and cannot say. A **writer** outputs a plain-language brief with links to trials, papers, and FDA-related records.
 
-```bash
+> **Not medical or legal advice** — a research and communication risk snapshot grounded in cited sources.
+
+## How the agents work
+
+| Agent | Role |
+|--------|------|
+| Planner | Breaks the claim into search queries |
+| Trial scout | ClinicalTrials.gov |
+| Science scout | OpenAlex + Europe PMC |
+| Regulatory scout | openFDA (recalls, labels, events where relevant) |
+| Advocate | Best supported reading of the evidence |
+| Critic | Overreach, weak studies, missing proof |
+| Writer | **Say** / **Don’t say** / **Need more proof** |
+
+Orchestration lives in `POST /api/scout` (server-only). LiteLLM is called only from `app/api/*` — never from the browser.
+
+## Local setup
+
+See **[SETUP.md](./SETUP.md)** for Windows steps: Next.js, `.env.local`, GitHub, Vercel.
+
+```powershell
+cd C:\Users\s.khalil\Documents\Agent-a-thon
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local` in the project root (never commit):
 
-## Learn More
+```env
+LITELLM_BASE_URL=https://<gateway>/v1
+LITELLM_API_KEY=sk-...
+LITELLM_MODEL=claude-sonnet
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Hackathon submission draft (≤600 characters)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Claim Lab runs specialist agents on ClinicalTrials.gov, OpenAlex, Europe PMC, and openFDA, then advocate and critic agents debate whether a public health or product claim is supported. A writer outputs say/don’t say guidance with citations. Multi-agent, API-grounded, not one chatbot.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Adjust wording to fit the portal limit.
 
-## Deploy on Vercel
+## Tech stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Next.js (App Router), TypeScript, Tailwind
+- OpenAI SDK → LiteLLM gateway
+- Deploy: Vercel + public GitHub repo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+Private hackathon project unless you add a license file.

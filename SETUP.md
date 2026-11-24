@@ -1,9 +1,10 @@
-# Prior-Art Scout — local setup (AGENT-A-THON)
+# Claim Lab — local setup (AGENT-A-THON)
 
 One guide for your Windows laptop: from an empty `Agent-a-thon` folder to GitHub + Vercel.  
 You already have **Node v20**, **npm**, and **Git** — good to go.
 
-**Project idea:** Multi-agent prior-art search (PatentsView, OpenAlex, arXiv) with a critic loop.  
+**Project idea:** Multi-agent claim fact-check for public statements (trials, papers, FDA) with advocate + critic + writer.  
+**Product name:** Claim Lab  
 **Folder on your PC:** `C:\Users\s.khalil\Documents\Agent-a-thon`
 
 ---
@@ -47,11 +48,11 @@ When prompted, accept defaults (**Yes** for App Router, TypeScript, Tailwind, ES
 **Option 2 — subfolder (recommended if `Agent-a-thon` has other files):**
 
 ```powershell
-npx create-next-app@latest prior-art-scout
-cd prior-art-scout
+npx create-next-app@latest claim-lab
+cd claim-lab
 ```
 
-The rest of this doc assumes your project root is where `package.json` lives (either `Agent-a-thon` or `Agent-a-thon\prior-art-scout`).
+The rest of this doc assumes your project root is where `package.json` lives (either `Agent-a-thon` or `Agent-a-thon\claim-lab`).
 
 ### A4. Install OpenAI SDK (works with LiteLLM)
 
@@ -146,10 +147,10 @@ git config --global user.email "you@example.com"
 ### D2. New repository on GitHub
 
 1. https://github.com/new  
-2. Name: e.g. `prior-art-scout`  
+2. Name: e.g. `claim-lab`  
 3. **Public**  
 4. Do **not** add README, .gitignore, or license (you already have them locally)  
-5. Create repository and keep the URL: `https://github.com/<username>/prior-art-scout.git`
+5. Create repository and keep the URL: `https://github.com/<username>/claim-lab.git`
 
 ### D3. First push
 
@@ -157,9 +158,9 @@ From the folder with `package.json`:
 
 ```powershell
 git add .
-git commit -m "chore: initial Next.js + Prior-Art Scout scaffold"
+git commit -m "chore: initial Next.js + Claim Lab scaffold"
 git branch -M main
-git remote add origin https://github.com/<username>/prior-art-scout.git
+git remote add origin https://github.com/<username>/claim-lab.git
 git push -u origin main
 ```
 
@@ -212,7 +213,7 @@ Vercel rebuilds `main` in 1–2 minutes. Green **Ready** in Deployments = live.
 
 | Field | What to paste |
 |-------|----------------|
-| GitHub | `https://github.com/<username>/prior-art-scout` |
+| GitHub | `https://github.com/<username>/claim-lab` |
 | Live URL | Short **`.vercel.app`** domain (not a long preview link) |
 | Summary | Up to 600 chars — see `README.md` for a draft |
 
@@ -225,20 +226,34 @@ Final checks:
 
 ---
 
-## Part H — What to build next (Prior-Art Scout)
+## Part H — What to build next (Claim Lab)
 
 After the smoke test works, add in order:
 
 1. **`POST /api/scout`** — orchestration route (no LLM in the browser)  
-2. **Tools** — `fetch` PatentsView, OpenAlex, arXiv from server code  
-3. **Agents** (separate prompts / steps): Search → Analyst → Critic → (loop) → Writer  
-4. **UI** — idea textarea + timeline of agent steps  
+2. **Tools** — server `fetch` to free APIs (see below)  
+3. **Agents** (separate prompts / steps):  
+   - **Planner** — turn claim into search queries  
+   - **Scouts** (can run in parallel): Trial scout, Science scout, Regulatory scout  
+   - **Advocate** — strongest honest reading of the evidence  
+   - **Critic** — overreach, gaps, wrong population; optional **one retry** if no data  
+   - **Writer** — Say / Don’t say / Need more proof  
+4. **UI** — claim textarea + vertical timeline of agent steps + final brief  
 
-Free APIs (no paid keys required):
+**Disclaimer (show in UI):** Research landscape only — not medical or legal advice.
 
-- PatentsView — https://search.patentsview.org/docs/docs/  
+Free APIs (no paid keys required for core demo):
+
+- ClinicalTrials.gov — https://clinicaltrials.gov/data-api/api  
 - OpenAlex — https://api.openalex.org/  
-- arXiv — https://arxiv.org/help/api  
+- Europe PMC — https://europepmc.org/RestfulWebService  
+- openFDA — https://open.fda.gov/apis/  
+
+**Agent flow (v1):**
+
+```text
+Claim → Planner → [Trial | Science | Regulatory scouts] → Advocate → Critic → Writer
+```
 
 ---
 
@@ -261,8 +276,8 @@ If you clone or copy this template from GitHub:
 
 ```powershell
 cd C:\Users\s.khalil\Documents\Agent-a-thon
-git clone https://github.com/<username>/prior-art-scout.git
-cd prior-art-scout
+git clone https://github.com/<username>/claim-lab.git
+cd claim-lab
 npm install
 copy .env.example .env.local
 npm run dev
